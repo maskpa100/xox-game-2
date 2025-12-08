@@ -1,0 +1,538 @@
+.container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameCard {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #764ba2;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resetButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+  margin-bottom: 25px;
+  display: inline-block;
+}
+
+.resetButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.5);
+}
+
+.resetButton:active {
+  transform: translateY(0);
+}
+
+.turnIndicator {
+  font-size: 1.2rem;
+  color: #667eea;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 30px 0;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cell {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border: none;
+  border-radius: 20px;
+  font-size: 3rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell:hover:not(.disabled) {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(118, 75, 162, 0.4);
+  background: linear-gradient(135deg, #ffeef8 0%, #f5d0fe 100%);
+}
+
+.cell.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.cell:active:not(.disabled) {
+  transform: translateY(-2px);
+}
+
+.x {
+  color: #e91e63;
+  font-size: 3.5rem;
+  animation: popIn 0.3s ease;
+}
+
+.o {
+  color: #9c27b0;
+  font-size: 3.5rem;
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.resultContainer {
+  margin: 30px 0;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.winMessage {
+  background: linear-gradient(135deg, #ffeef8 0%, #f5d0fe 100%);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 20px;
+  border: 3px solid #e91e63;
+}
+
+.winMessage h2 {
+  color: #e91e63;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.promoCodeContainer {
+  margin-top: 20px;
+}
+
+.promoLabel {
+  color: #764ba2;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.promoCode {
+  background: white;
+  border: 3px dashed #e91e63;
+  border-radius: 15px;
+  padding: 20px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e91e63;
+  letter-spacing: 5px;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.loseMessage {
+  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 20px;
+  border: 3px solid #9e9e9e;
+}
+
+.loseMessage h2 {
+  color: #616161;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.loseMessage p {
+  color: #757575;
+  font-size: 1.1rem;
+}
+
+.drawMessage {
+  background: linear-gradient(135deg, #fff9e6 0%, #ffe0b2 100%);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 20px;
+  border: 3px solid #ff9800;
+}
+
+.drawMessage h2 {
+  color: #f57c00;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.drawMessage p {
+  color: #e65100;
+  font-size: 1.1rem;
+}
+
+.playAgainButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+  margin-top: 20px;
+}
+
+.playAgainButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.6);
+}
+
+.playAgainButton:active {
+  transform: translateY(-1px);
+}
+
+.loading {
+  color: #764ba2;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .gameCard {
+    padding: 25px;
+    border-radius: 20px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .board {
+    gap: 10px;
+  }
+
+  .cell {
+    font-size: 2.5rem;
+  }
+
+  .x, .o {
+    font-size: 3rem;
+  }
+
+  .promoCode {
+    font-size: 1.5rem;
+    padding: 15px;
+    letter-spacing: 3px;
+  }
+
+  .modalContent {
+    padding: 30px 20px;
+    max-width: 90%;
+  }
+
+  .modalTitle {
+    font-size: 1.5rem;
+  }
+
+  .modalPromoCode {
+    font-size: 1.8rem;
+    padding: 15px;
+    letter-spacing: 3px;
+  }
+}
+
+/* Модальное окно */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  padding: 20px;
+}
+
+.modalContent {
+  background: linear-gradient(135deg, #ffffff 0%, #ffeef8 100%);
+  border-radius: 30px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  animation: modalSlideIn 0.4s ease;
+  border: 3px solid #e91e63;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalClose {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(233, 30, 99, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 1.2rem;
+  color: #e91e63;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.modalClose:hover {
+  background: rgba(233, 30, 99, 0.2);
+  transform: rotate(90deg);
+}
+
+.modalBody {
+  text-align: center;
+}
+
+.modalTitle {
+  color: #e91e63;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.modalSubtitle {
+  color: #764ba2;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+
+.modalPromoCode {
+  background: white;
+  border: 3px dashed #e91e63;
+  border-radius: 20px;
+  padding: 25px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #e91e63;
+  letter-spacing: 8px;
+  display: inline-block;
+  margin-bottom: 25px;
+  animation: pulse 2s infinite;
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.2);
+}
+
+.copyButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+  margin-bottom: 15px;
+  display: block;
+  width: 100%;
+}
+
+.copyButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.6);
+}
+
+.copyButton:active {
+  transform: translateY(0);
+}
+
+.modalCloseButton {
+  background: transparent;
+  color: #764ba2;
+  border: 2px solid #764ba2;
+  border-radius: 20px;
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.modalCloseButton:hover {
+  background: #764ba2;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Модальное окно при проигрыше */
+.modalContentLose {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  border-radius: 30px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  animation: modalSlideIn 0.4s ease;
+  border: 3px solid #9e9e9e;
+}
+
+.modalTitleLose {
+  color: #616161;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.modalSubtitleLose {
+  color: #757575;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+
+.modalPlayAgainButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modalPlayAgainButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.6);
+}
+
+.modalPlayAgainButton:active {
+  transform: translateY(-1px);
+}
+
+/* Модальное окно при ничьей */
+.modalContentDraw {
+  background: linear-gradient(135deg, #ffffff 0%, #fff9e6 100%);
+  border-radius: 30px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  animation: modalSlideIn 0.4s ease;
+  border: 3px solid #ff9800;
+}
+
+.modalTitleDraw {
+  color: #f57c00;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.modalSubtitleDraw {
+  color: #e65100;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+
+.modalCloseDraw {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 152, 0, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 1.2rem;
+  color: #ff9800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.modalCloseDraw:hover {
+  background: rgba(255, 152, 0, 0.2);
+  transform: rotate(90deg);
+}
+
