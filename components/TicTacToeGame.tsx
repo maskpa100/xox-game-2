@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './TicTacToeGame.module.css'
+import { Theme, themes } from '@/lib/themes'
 
 type CellValue = 'X' | 'O' | null
 type GameStatus = 'playing' | 'playerWon' | 'computerWon' | 'draw'
@@ -14,6 +15,53 @@ export default function TicTacToeGame() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalType, setModalType] = useState<'win' | 'lose' | 'draw' | null>(null)
+  const [theme, setTheme] = useState<Theme>('pink')
+  const [showThemeSelector, setShowThemeSelector] = useState(false)
+
+  // Загрузка темы из localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('game-theme') as Theme
+    if (savedTheme && themes[savedTheme]) {
+      setTheme(savedTheme)
+    }
+  }, [])
+
+  // Применение темы
+  useEffect(() => {
+    const currentTheme = themes[theme]
+    const root = document.documentElement
+
+    root.style.setProperty('--theme-bg', currentTheme.background)
+    root.style.setProperty('--theme-bg-size', currentTheme.backgroundSize)
+    root.style.setProperty('--theme-bg-before', currentTheme.backgroundBefore)
+    root.style.setProperty('--theme-card-bg', currentTheme.cardBackground)
+    root.style.setProperty('--theme-card-border', currentTheme.cardBorder)
+    root.style.setProperty('--theme-card-shadow', currentTheme.cardShadow)
+    root.style.setProperty('--theme-title-gradient', currentTheme.titleGradient)
+    root.style.setProperty('--theme-button-gradient', currentTheme.buttonGradient)
+    root.style.setProperty('--theme-button-color', currentTheme.buttonColor)
+    root.style.setProperty('--theme-button-border', currentTheme.buttonBorder)
+    root.style.setProperty('--theme-cell-bg', currentTheme.cellBackground)
+    root.style.setProperty('--theme-cell-border', currentTheme.cellBorder)
+    root.style.setProperty('--theme-cell-hover', currentTheme.cellHover)
+    root.style.setProperty('--theme-x-color', currentTheme.xColor)
+    root.style.setProperty('--theme-o-color', currentTheme.oColor)
+    root.style.setProperty('--theme-modal-win-bg', currentTheme.modalWinBackground)
+    root.style.setProperty('--theme-modal-win-border', currentTheme.modalWinBorder)
+    root.style.setProperty('--theme-modal-lose-bg', currentTheme.modalLoseBackground)
+    root.style.setProperty('--theme-modal-lose-border', currentTheme.modalLoseBorder)
+    root.style.setProperty('--theme-modal-draw-bg', currentTheme.modalDrawBackground)
+    root.style.setProperty('--theme-modal-draw-border', currentTheme.modalDrawBorder)
+    root.style.setProperty('--theme-promo-color', currentTheme.promoCodeColor)
+    root.style.setProperty('--theme-promo-border', currentTheme.promoCodeBorder)
+  }, [theme])
+
+  // Смена темы
+  const changeTheme = (newTheme: Theme) => {
+    setTheme(newTheme)
+    localStorage.setItem('game-theme', newTheme)
+    setShowThemeSelector(false)
+  }
 
   // Генерация случайного 5-значного промокода
   const generatePromoCode = (): string => {
@@ -74,7 +122,7 @@ export default function TicTacToeGame() {
     const availableMoves = cells
       .map((cell, index) => (cell === null ? index : null))
       .filter((index): index is number => index !== null)
-    
+
     return availableMoves[Math.floor(Math.random() * availableMoves.length)]
   }
 
@@ -176,14 +224,59 @@ export default function TicTacToeGame() {
     setModalType(null)
   }
 
+  // Закрытие селектора темы при клике вне его
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (showThemeSelector && !target.closest(`.${styles.themeSelectorContainer}`)) {
+        setShowThemeSelector(false)
+      }
+    }
+
+    if (showThemeSelector) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showThemeSelector])
+
   return (
     <div className={styles.container}>
       <div className={styles.gameCard}>
-        <h1 className={styles.title}>✨ Крестики-нолики ✨</h1>
-        <button onClick={resetGame} className={styles.resetButton}>
-          🔄 Начать заново
-        </button>
-        
+        <div className={styles.headerRow}>
+          <h1 className={styles.title}>✨ Крестики-нолики ✨</h1>
+          <div className={styles.themeSelectorContainer}>
+
+            {showThemeSelector && (
+              <div className={styles.themeSelector}>
+                {(Object.keys(themes) as Theme[]).map((themeKey) => (
+                  <button
+                    key={themeKey}
+                    onClick={() => changeTheme(themeKey)}
+                    className={`${styles.themeOption} ${theme === themeKey ? styles.active : ''}`}
+                    title={themes[themeKey].name}
+                  >
+                    {themes[themeKey].emoji}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className={styles.buttonS}>
+          <button onClick={resetGame} className={styles.resetButton}>
+            🔄 Начать заново
+          </button>
+          <button
+            onClick={() => setShowThemeSelector(!showThemeSelector)}
+            className={styles.themeButton}
+            title="Сменить тему"
+          >
+            {themes[theme].emoji}
+          </button>
+        </div>
         {gameStatus === 'playing' && (
           <p className={styles.turnIndicator}>
             {isPlayerTurn ? '🎯 Ваш ход!' : '🤔 Компьютер думает...'}
@@ -196,9 +289,8 @@ export default function TicTacToeGame() {
           {board.map((cell, index) => (
             <button
               key={index}
-              className={`${styles.cell} ${
-                !isPlayerTurn || gameStatus !== 'playing' ? styles.disabled : ''
-              }`}
+              className={`${styles.cell} ${!isPlayerTurn || gameStatus !== 'playing' ? styles.disabled : ''
+                }`}
               onClick={() => handleCellClick(index)}
               disabled={cell !== null || !isPlayerTurn || gameStatus !== 'playing'}
             >
@@ -224,7 +316,7 @@ export default function TicTacToeGame() {
               <h2 className={styles.modalTitle}>🎁 Ваш промокод на скидку!</h2>
               <p className={styles.modalSubtitle}>Скопируйте и используйте при оформлении заказа</p>
               <div className={styles.modalPromoCode}>{promoCode}</div>
-              <button 
+              <button
                 className={styles.copyButton}
                 onClick={() => {
                   navigator.clipboard.writeText(promoCode)
