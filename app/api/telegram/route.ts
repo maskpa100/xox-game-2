@@ -4,9 +4,9 @@ export async function POST(request: NextRequest) {
   try {
     const { message } = await request.json()
 
-    const botToken = '7516647131:AAEXbTKrpaZqCWAXhK3z1OQm9ICv9NZOM9s'
-    const chatId = '8187785584'
 
+    const botToken = process.env.TELEGRAM_BOT_TOKEN
+    const chatId = process.env.CHAT_ID
     if (!botToken || !chatId) {
       console.error('Telegram credentials not configured')
       return NextResponse.json(
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`
-    
+
     const response = await fetch(telegramApiUrl, {
       method: 'POST',
       headers: {
